@@ -82,27 +82,35 @@ def main():
                 processed_content = s2t_convert(raw_content)
                 chapters = parse_chapters(processed_content)
                 
-                # 生成 UUID 檔名的 EPUB
                 temp_epub_path = work_dir / f"{safe_id}.epub"
                 original_title = Path(filename).stem
                 
                 generate_epub(original_title, "Unknown", chapters, temp_epub_path, style_config)
                 
-                # 執行轉換
                 if run_kepubify(temp_epub_path, kepub_dir):
-                    # 預期輸出
-                    expected_output = kepub_dir / f"{safe_id}.kepub.epub"
+                    # ✅ 修正重點：兼容兩種可能的輸出檔名
+                    possible_names = [
+                        f"{safe_id}.kepub.epub",           # 標準情況
+                        f"{safe_id}_converted.kepub.epub"  # 現在遇到的情況
+                    ]
                     
-                    if not expected_output.exists():
-                        logging.error(f"   ❌ 轉換後檔案遺失！")
-                        logging.error(f"   🔍 現場勘查: kepub_out 目錄下的檔案有: {[f.name for f in kepub_dir.iterdir()]}")
+                    found_file = None
+                    for name in possible_names:
+                        f_path = kepub_dir / name
+                        if f_path.exists():
+                            found_file = f_path
+                            break
+                    
+                    if not found_file:
+                        logging.error(f"   ❌ 轉換後檔案遺失！(已檢查: {possible_names})")
+                        logging.error(f"   🔍 現場勘查: {list(kepub_dir.iterdir())}")
                         continue
 
                     final_kepub_name = f"{original_title}.kepub.epub"
                     target_output_path = f"{output_base}/{subfolder}/{final_kepub_name}"
                     
                     logging.info(f"   ☁️ 上傳為: {final_kepub_name}")
-                    if client.upload_file(expected_output, target_output_path):
+                    if client.upload_file(found_file, target_output_path):
                         target_archive_path = f"{archive_base}/{subfolder}/{filename}"
                         client.move_file(file_meta['path_lower'], target_archive_path)
                         logging.info(f"   ✅ 全部完成: {filename}")
