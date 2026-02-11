@@ -1,9 +1,9 @@
 {
-  "description": "Dropbox 路徑配置",
+  "description": "Dropbox 路徑配置 (Full Dropbox 模式)",
   "directories": {
     "input_base": "/小説/txt/新上傳",
     "archive_base": "/小説/txt/已處理",
-    "output_base": "/Rakuten Kobo/小說"
+    "output_base": "/應用程式/Rakuten Kobo/小說"
   },
   "monitor_subfolders": [
     "001",
