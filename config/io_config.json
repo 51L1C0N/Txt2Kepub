@@ -1,9 +1,9 @@
 {
-  "dropbox_root": "/小説",
+  "description": "Dropbox 路徑配置",
   "directories": {
     "input_base": "/小説/txt/新上傳",
-    "output_base": "/Rakuten Kobo/小說",
-    "archive_base": "/小説/txt/已處理"
+    "archive_base": "/小説/txt/已處理",
+    "output_base": "/Rakuten Kobo/小說"
   },
   "monitor_subfolders": [
     "001",
