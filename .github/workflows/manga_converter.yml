@@ -1,4 +1,4 @@
-name: Manga to Kepub Auto Converter
+name: manga to kepub auto converter
 
 on:
   schedule:
