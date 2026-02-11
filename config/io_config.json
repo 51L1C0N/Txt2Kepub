@@ -1,10 +1,10 @@
 {
-  "description": "Dropbox 單一應用程式目錄封裝配置",
+  "description": "Dropbox 單一應用程式沙盒配置",
   "directories": {
-    "input_base": "/應用程式/HanYun-Ebook-Converter/txt/新上傳",
-    "archive_base": "/應用程式/HanYun-Ebook-Converter/txt/已處理",
-    "epub_base": "/應用程式/HanYun-Ebook-Converter/epub/已轉檔",
-    "output_base": "/應用程式/HanYun-Ebook-Converter/kepub/已轉檔"
+    "input_base": "/txt/新上傳",
+    "archive_base": "/txt/已處理",
+    "epub_base": "/epub/已轉檔",
+    "output_base": "/kepub/已轉檔"
   },
   "monitor_subfolders": [
     "001",
