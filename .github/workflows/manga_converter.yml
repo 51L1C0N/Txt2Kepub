@@ -1,0 +1,28 @@
+name: Manga to Kepub Auto Converter
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天北京時間 09:00 執行 (與文字書錯開一小時)
+  workflow_dispatch:      # 允許手動觸發
+
+jobs:
+  manga-process:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Grant Permission
+        run: chmod +x bin/kepubify
+      - name: Run Manga Converter
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+        run: python manga_main.py
