@@ -22,10 +22,14 @@ def main():
     manga_style = load_json(base_dir / 'styles' / 'manga_standard.json')
     
     try:
-        service_account_json = os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']
-        client = GoogleDriveClient(service_account_json, root_folder_name="Ebook-Converter")
-    except KeyError:
-        logging.error("❌ 缺少環境變數: GOOGLE_SERVICE_ACCOUNT_JSON")
+        client_id = os.environ['GOOGLE_CLIENT_ID']
+        client_secret = os.environ['GOOGLE_CLIENT_SECRET']
+        refresh_token = os.environ['GOOGLE_REFRESH_TOKEN']
+        
+        # 這裡填入您在 Google Drive 建立的根目錄名稱
+        client = GoogleDriveClient(client_id, client_secret, refresh_token, root_folder_name="Ebook-Converter")
+    except KeyError as e:
+        logging.error(f"❌ 缺少環境變數: {e}")
         return
     except Exception as e:
         logging.error(f"❌ Google Drive 連線失敗: {e}")
