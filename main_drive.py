@@ -18,7 +18,7 @@ def load_json(path):
 def main():
     base_dir = Path(__file__).resolve().parent
     # 共用原本的設定檔
-    io_config = load_json(base_dir / 'config' / 'io_config.json')
+    io_config = load_json(base_dir / 'config' / 'drive_io_config.json')
     profile_map = load_json(base_dir / 'config' / 'profile_map.json')
     
     # 初始化 Google Drive 連線
@@ -111,7 +111,7 @@ def main():
                     
                     if found_file:
                         final_kepub_name = f"{original_title}.kepub.epub"
-                        target_output_path = f"{output_base}/{subfolder}/{final_kepub_name}"
+                        target_output_path = f"{output_base}/{final_kepub_name}"
                         logging.info(f"   ☁️ 上傳 KePub: {final_kepub_name}")
                         
                         if client.upload_file(found_file, target_output_path):
