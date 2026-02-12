@@ -18,7 +18,7 @@ def main():
     base_dir = Path(__file__).resolve().parent
     
     # 共用漫畫設定與樣式
-    manga_config = load_json(base_dir / 'config' / 'manga_config.json')
+    manga_config = load_json(base_dir / 'config' / 'drive_manga_config.json')
     manga_style = load_json(base_dir / 'styles' / 'manga_standard.json')
     
     try:
@@ -79,7 +79,7 @@ def main():
                 
                 if kepub_file:
                     final_name = fname.replace('.epub', '.kepub.epub')
-                    target_path = f"{output_base}/{sub}/{final_name}"
+                    target_path = f"{output_base}/{final_name}"
                     
                     logging.info(f"   ☁️ 上傳 KePub: {final_name}")
                     if client.upload_file(kepub_file, target_path):
