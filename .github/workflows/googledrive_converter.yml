@@ -1,40 +1,55 @@
-name: Google Drive Converter (Beta)
+name: Google Drive All-in-One Converter
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # 每天北京時間 10:30 執行 (避開 Dropbox 時段)
+    - cron: '0 22 * * *'  # UTC 22:00 = 北京時間 06:00
   workflow_dispatch:      # 允許手動觸發
 
 jobs:
-  drive-process:
+  drive-pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      
+          
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
+          
       - name: Grant Permission
         run: chmod +x bin/kepubify
-      
-      # 執行小說轉檔 (Google Drive)
-      - name: Run Drive Novel Converter
-        env:
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-        run: python main_drive.py
 
-      # 執行漫畫轉檔 (Google Drive)
-      - name: Run Drive Manga Converter
+      # --- 任務 1: 文字小說 (自動重試 3 次) ---
+      - name: Run Drive Novel Converter (Retry on Failure)
+        uses: nick-fields/retry@v3
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-        run: python manga_main_drive.py
+        with:
+          timeout_minutes: 15
+          max_attempts: 1
+          retry_wait_seconds: 30
+          command: python main_drive.py
+
+      # --- 中場休息 10 秒 ---
+      - name: Cool down
+        run: sleep 10
+
+      # --- 任務 2: 漫畫 (自動重試 3 次) ---
+      - name: Run Drive Manga Converter (Retry on Failure)
+        uses: nick-fields/retry@v3
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        with:
+          timeout_minutes: 30
+          max_attempts: 1
+          retry_wait_seconds: 30
+          command: python manga_main_drive.py
