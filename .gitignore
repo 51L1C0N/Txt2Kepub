@@ -205,3 +205,49 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ==========================
+# 1. 安全與隱私 (最重要)
+# ==========================
+# 忽略 Cookies 與 身份驗證文件 (novel-download)
+cookie.json
+
+# 忽略環境變數與密鑰 (txt2kepub 本地測試用)
+.env
+.env.local
+client_secret.json
+credentials.json
+token.json
+google_token.pickle
+
+# ==========================
+# 2. Python 系統檔案 (標準配置)
+# ==========================
+# 忽略編譯產生的快取資料夾
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 忽略虛擬環境資料夾 (如果您有建立 venv)
+venv/
+env/
+.venv/
+
+# ==========================
+# 3. 專案運行產物 (避免上傳垃圾檔案)
+# ==========================
+# 忽略日誌文件 (novel-download 會產生錯誤日誌)
+*.log
+
+# 忽略 Mac 系統產生的縮圖索引 (因為您使用 Mac)
+.DS_Store
+
+# ==========================
+# 4. 資料文件 (避免上傳小說內容)
+# ==========================
+# 忽略所有下載的小說文字檔、電子書檔
+*.txt
+*.epub
+*.kepub.epub
+*.zip
+*.rar
